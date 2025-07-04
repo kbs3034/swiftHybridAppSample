@@ -14,6 +14,7 @@
     <button id="btnClipBoard">클립보드 테스트</button><br/>
     <input type="text" id="ipClipBoard" placeholder="클립보드 테스트 확인"><br/><br/>
     <button id="btnRestart">재시작 테스트</button><br/><br/>
+    <button id="btnRxBusTest">RxBus 테스트</button><br/><br/>
 </body>
 
 <script type="text/javascript">
@@ -104,6 +105,12 @@ document.getElementById('btnTestBridge').onclick = function(event){
 
     document.getElementById('btnRestart').onclick = function(event){
         NativeCall("nativeSystem.restart");
+    }
+    
+    document.getElementById('btnRxBusTest').onclick = function(event){
+        NativeCall("RxBus.RxBusTest",{}, function(result){
+            alert('RxBusTest Success!!' + result )
+        });
     }
 
     

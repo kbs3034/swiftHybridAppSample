@@ -9,7 +9,7 @@
 import Foundation
 import WebKit
 
-class NativeSystem: BaseWebBridge {
+class NativeSystemBridge: BaseWebBridge {
     
     //NativeSystem에서 callback script 실행전 특별 처리가 필요하거나, 커스텀이 필요하면 아래 함수 overriding 코드 주석을 해제하여
     //NativeSyste의 runCallbackScript를 재정의 한다.

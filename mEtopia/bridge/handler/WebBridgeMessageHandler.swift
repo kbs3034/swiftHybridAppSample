@@ -11,16 +11,16 @@ class WebBridgeMessageHandler {
     var webView:WKWebView
     var viewController:UIViewController
     
-    var nativeSystem:NativeSystem
+    //bridge 목록
+    var nativeSystem:NativeSystemBridge
+    var rxBusBridge:RxBusBridge
     
     init(viewController:UIViewController, webView:WKWebView) {
-        //viewController:UIViewController, webView:WKWebView, callback:RunCallbackScript
-        
-           
         self.webView = webView
         self.viewController = viewController
         
-        self.nativeSystem = NativeSystem(viewController:viewController, webView:webView)
+        self.nativeSystem = NativeSystemBridge(viewController:viewController, webView:webView)
+        self.rxBusBridge = RxBusBridge(viewController:viewController, webView:webView)
     }
     
     func handle(message:WKScriptMessage) {
@@ -40,6 +40,8 @@ class WebBridgeMessageHandler {
             switch group {
             case "nativeSystem":
                 bridge = nativeSystem
+            case "RxBus":
+                bridge = rxBusBridge
             default:
             #if DEBUG
                 let msg = "\(String(describing: group))는 미개발된 기능입니다. 네이티브 담당자 확인이 필요합니다."

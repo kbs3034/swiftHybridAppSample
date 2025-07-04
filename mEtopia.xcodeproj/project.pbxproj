@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1A169BE72E17B76B008BBB83 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 1A169BE62E17B76B008BBB83 /* RxCocoa */; };
+		1A169BE92E17B76B008BBB83 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1A169BE82E17B76B008BBB83 /* RxSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		1A169BB52E160226008BBB83 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A169BE92E17B76B008BBB83 /* RxSwift in Frameworks */,
+				1A169BE72E17B76B008BBB83 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +132,8 @@
 			);
 			name = mEtopia;
 			packageProductDependencies = (
+				1A169BE62E17B76B008BBB83 /* RxCocoa */,
+				1A169BE82E17B76B008BBB83 /* RxSwift */,
 			);
 			productName = mEtopia;
 			productReference = 1A169B9E2E160224008BBB83 /* mEtopia.app */;
@@ -208,6 +217,9 @@
 			);
 			mainGroup = 1A169B952E160224008BBB83;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1A169BE52E17B76B008BBB83 /* XCRemoteSwiftPackageReference "RxSwift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1A169B9F2E160224008BBB83 /* Products */;
 			projectDirPath = "";
@@ -569,6 +581,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1A169BE52E17B76B008BBB83 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1A169BE62E17B76B008BBB83 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A169BE52E17B76B008BBB83 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		1A169BE82E17B76B008BBB83 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A169BE52E17B76B008BBB83 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1A169B962E160224008BBB83 /* Project object */;
 }
