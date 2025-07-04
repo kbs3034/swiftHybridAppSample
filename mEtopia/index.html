@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Hello! Mobile!!</title>
+</head>
+
+<body>
+    <h1>Hello! Mobile!!@@@@</h1>
+    <button id="btnTestBridge">브릿지 테스트</button><br/><br/>
+    <button id="btnBuildType">빌드 타입</button><br/><br/>
+    <button id="btnAppversion">앱버전</button><br/><br/>
+    <button id="btnClipBoard">클립보드 테스트</button><br/>
+    <input type="text" id="ipClipBoard" placeholder="클립보드 테스트 확인"><br/><br/>
+    <button id="btnRestart">재시작 테스트</button><br/><br/>
+</body>
+
+<script type="text/javascript">
+    
+var isJsonString = function(str) {
+  try {
+    var json = JSON.parse(str);
+    return (typeof json === 'object');
+  } catch (e) {
+    return false;
+  }
+}
+
+var NativeCall = function (functionStr, param, callback) {
+    var _function = functionStr.split(".");
+
+    var group = _function[0];
+    var functionKey = _function[1];
+    var _callback = callback;
+    var _param = {};
+    
+    if(!!param) _param.data = param
+
+    _param["group"] = group;
+    _param["functionKey"] = functionKey;
+    
+    if(typeof _callback == 'string') {
+        _callback = window[callback];
+        if(!callback) return alert(callback+' 은 전역 변수로 존재하지 않는 함수 입니다.');
+    }
+
+    if (typeof _callback == 'function') {
+        var callbackStr = '__BRIDGE__CALLBACK__' + Date.now();
+
+        window[callbackStr] = function (result) {
+            result = (isJsonString(result)) ? JSON.parse(result) : result;
+            if(result.status.code == '0') {
+                //익명함수로 받은 콜백함수 실행
+                _callback(result.data);
+            } else {
+                //실패처리(기본 시스템 alert)
+                alert(result.status.msg);
+            }
+
+            delete window[callbackStr];
+        };
+
+        _param.callback = callbackStr;
+    }
+
+    var result;
+    if(navigator.userAgent.indexOf("ETOPIA_IOS") > -1) {
+        webkit.messageHandlers.NativeCall.postMessage(JSON.stringify(_param));
+    } else {
+        result = androidWebBridge.NativeCall(JSON.stringify(_param));
+    }
+    
+
+    result = (isJsonString(result)) ? JSON.parse(result) : result;
+    return result;
+}
+
+var bridgeTestCallback = function(res) {
+
+    console.log(res);
+    alert(res.msg);
+}
+
+document.getElementById('btnTestBridge').onclick = function(event){
+        NativeCall("nativeSystem.bridgeTest", {}, 'bridgeTestCallback');
+    }
+
+    document.getElementById('btnBuildType').onclick = function(event){
+        var buildType = NativeCall("nativeSystem.buildType");
+        alert(buildType);
+    }
+
+    document.getElementById('btnAppversion').onclick = function(event){
+        var appVersion = NativeCall("nativeSystem.getAppVersionName");
+        alert(appVersion);
+    }
+
+    document.getElementById('btnClipBoard').onclick = function(event){
+        NativeCall("nativeSystem.copyClipboard", {'copyStr':'clipBoard copy test!!'}, function(result){
+            document.getElementById("ipClipBoard").value = result.str;
+        });
+    }
+
+    document.getElementById('btnRestart').onclick = function(event){
+        NativeCall("nativeSystem.restart");
+    }
+
+    
+    //시스템 alert 레이어 팝업 방식 변경
+    window.alert = function(message) {
+        // 기존 알럿이 있으면 제거
+        const existing = document.getElementById("custom-alert");
+        if (existing) existing.remove();
+
+        // 반투명 배경
+        const overlay = document.createElement("div");
+        overlay.id = "custom-alert";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.backgroundColor = "rgba(0,0,0,0.5)";
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "9999";
+
+        // 알럿 박스
+        const alertBox = document.createElement("div");
+        alertBox.style.backgroundColor = "#fff";
+        alertBox.style.padding = "24px 32px";
+        alertBox.style.borderRadius = "8px";
+        alertBox.style.boxShadow = "0 2px 10px rgba(0,0,0,0.3)";
+        alertBox.style.textAlign = "center";
+        alertBox.style.maxWidth = "300px";
+        alertBox.style.width = "80%";
+
+        // 메시지
+        const messageElem = document.createElement("div");
+        messageElem.style.marginBottom = "20px";
+        messageElem.style.fontSize = "16px";
+        messageElem.style.color = "#333";
+        messageElem.innerText = message;
+
+        // 확인 버튼
+        const okButton = document.createElement("button");
+        okButton.innerText = "확인";
+        okButton.style.padding = "10px 20px";
+        okButton.style.fontSize = "14px";
+        okButton.style.backgroundColor = "#007bff";
+        okButton.style.color = "#fff";
+        okButton.style.border = "none";
+        okButton.style.borderRadius = "4px";
+        okButton.style.cursor = "pointer";
+
+        okButton.onclick = function() {
+            overlay.remove();
+        };
+
+        alertBox.appendChild(messageElem);
+        alertBox.appendChild(okButton);
+        overlay.appendChild(alertBox);
+        document.body.appendChild(overlay);
+    };
+</script>
+
+</html>
